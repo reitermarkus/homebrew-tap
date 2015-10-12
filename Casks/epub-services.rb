@@ -1,6 +1,6 @@
 cask :v1 => 'epub-services' do
-  version '1.0.0'
-  sha256 '23dd6316eeebb250ff11581a263180326540fe58dda558d448587270998b768d'
+  version '1.0.1'
+  sha256 '2377604b34f42c7c77236805b93ab1ac6badc272e14b7b38832d028aba3da302'
 
   url "https://github.com/reitermarkus/epub-services/archive/#{version}.tar.gz"
   name 'EPUB Finder Services'
