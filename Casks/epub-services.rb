@@ -1,4 +1,4 @@
-cask :v1 => 'epub-services' do
+cask 'epub-services' do
   version '1.0.1'
   sha256 '2377604b34f42c7c77236805b93ab1ac6badc272e14b7b38832d028aba3da302'
 

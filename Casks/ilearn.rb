@@ -1,4 +1,4 @@
-cask :v1 => 'ilearn' do
+cask 'ilearn' do
   version :latest
   sha256 :no_check
 

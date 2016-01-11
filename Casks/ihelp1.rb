@@ -1,4 +1,4 @@
-cask :v1 => 'ihelp1' do
+cask 'ihelp1' do
   version :latest
   sha256 :no_check
 
@@ -6,6 +6,6 @@ cask :v1 => 'ihelp1' do
   name 'iHelp'
   homepage 'http://www.rmartijnr.eu/iHelp/index.html'
   license :freemium
-  
+
   app 'iHelp.app'
 end

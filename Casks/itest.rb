@@ -1,4 +1,4 @@
-cask :v1 => 'itest' do
+cask 'itest' do
   version :latest
   sha256 :no_check
 

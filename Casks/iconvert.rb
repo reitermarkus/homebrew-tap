@@ -1,4 +1,4 @@
-cask :v1 => 'iconvert' do
+cask 'iconvert' do
   version :latest
   sha256 :no_check
 
