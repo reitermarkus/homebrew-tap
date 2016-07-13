@@ -2,12 +2,17 @@ cask 'ihelp' do
   version :latest
   sha256 :no_check
 
-  url 'http://dl.rmartijnr.eu/iHelp2/iHelp.zip'
+  if MacOS.release < :yosemite
+    url 'http://dl.rmartijnr.eu/iHelp/iHelp.zip'
+  else
+    url 'http://dl.rmartijnr.eu/iHelp2/iHelp.zip'
+  end
+
   name 'iHelp'
   homepage 'http://www.rmartijnr.eu/iHelp/index.html'
   license :freemium
 
-  app 'iHelp.app'
+  depends_on macos: '>= :yosemite'
 
-  depends_on :macos => '>= :yosemite'
+  app 'iHelp.app'
 end
