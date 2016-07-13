@@ -7,11 +7,10 @@ cask 'epub-services' do
   homepage 'https://github.com/reitermarkus/epub-services'
   license :oss
 
-  depends_on :formula => 'epubcheck'
-  depends_on :formula => 'terminal-notifier'
+  depends_on formula: 'epubcheck'
+  depends_on formula: 'terminal-notifier'
 
   service "epub-services-#{version}/Check EPUB.workflow"
   service "epub-services-#{version}/Convert to EPUB.workflow"
   service "epub-services-#{version}/Extract EPUB.workflow"
-
 end

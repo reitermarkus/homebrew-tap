@@ -7,8 +7,7 @@ cask 'adobe-creative-cloud' do
   homepage 'https://creative.adobe.com/products/creative-cloud'
   license :commercial
 
-  installer :script => 'Creative Cloud Installer.app/Contents/MacOS/Install'
+  installer script: 'Creative Cloud Installer.app/Contents/MacOS/Install'
 
-  uninstall :script => '/Applications/Utilities/Adobe Creative Cloud/Utils/Creative Cloud Uninstaller.app/Contents/MacOS/Creative Cloud Uninstaller'
-
+  uninstall script: '/Applications/Utilities/Adobe Creative Cloud/Utils/Creative Cloud Uninstaller.app/Contents/MacOS/Creative Cloud Uninstaller'
 end
