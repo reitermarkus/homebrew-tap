@@ -1,0 +1,54 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ast (2.3.0)
+    diff-lcs (1.2.5)
+    metaclass (0.0.4)
+    minitest (5.4.1)
+    minitest-colorize (0.0.5)
+      minitest (>= 2.0)
+    mocha (1.1.0)
+      metaclass (~> 0.0.1)
+    parser (2.3.1.2)
+      ast (~> 2.2)
+    powerpack (0.1.1)
+    public_suffix (2.0.2)
+    rainbow (2.1.0)
+    rake (11.2.2)
+    rspec (3.0.0)
+      rspec-core (~> 3.0.0)
+      rspec-expectations (~> 3.0.0)
+      rspec-mocks (~> 3.0.0)
+    rspec-core (3.0.4)
+      rspec-support (~> 3.0.0)
+    rspec-expectations (3.0.4)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.0.0)
+    rspec-mocks (3.0.4)
+      rspec-support (~> 3.0.0)
+    rspec-support (3.0.4)
+    rubocop (0.41.2)
+      parser (>= 2.3.1.1, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 1.99.1, < 3.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
+    rubocop-cask (0.8.2)
+      public_suffix (~> 2.0)
+      rubocop (~> 0.41.1)
+    ruby-progressbar (1.8.1)
+    unicode-display_width (1.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  minitest (= 5.4.1)
+  minitest-colorize
+  mocha (= 1.1.0)
+  rake
+  rspec (~> 3.0.0)
+  rubocop-cask (~> 0.8.2)
+
+BUNDLED WITH
+   1.12.5
