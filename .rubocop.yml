@@ -2,6 +2,9 @@ require: 'rubocop-cask'
 
 AllCops:
   TargetRubyVersion: 2.0
+  Exclude:
+    - 'Casks/**/*.rb'
+    - 'Formula/**/*.rb'
 
 Metrics/AbcSize:
   Enabled: false
@@ -20,10 +23,6 @@ Metrics/PerceivedComplexity:
 
 Metrics/ModuleLength:
   CountComments: false
-  Exclude:
-    - 'lib/hbc/locations.rb'
-    - 'lib/hbc/macos.rb'
-    - 'lib/hbc/utils.rb'
 
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
