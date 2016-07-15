@@ -12,7 +12,5 @@ cask 'ihelp' do
   homepage 'http://www.rmartijnr.eu/iHelp/index.html'
   license :freemium
 
-  depends_on macos: '>= :yosemite'
-
   app 'iHelp.app'
 end
