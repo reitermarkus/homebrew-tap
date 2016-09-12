@@ -40,18 +40,6 @@ modified_cask_files () {
   echo "${MODIFIED_CASK_FILES}"
 }
 
-modified_files_outside_casks () {
-  if [[ -z "${MODIFIED_FILES_OUTSIDE_CASKS+defined}" ]]; then
-    MODIFIED_FILES_OUTSIDE_CASKS="$(git diff --name-only "${TRAVIS_COMMIT_RANGE}" -- !(Casks))"
-    export MODIFIED_FILES_OUTSIDE_CASKS
-  fi
-  echo "${MODIFIED_FILES_OUTSIDE_CASKS}"
-}
-
 any_casks_modified () {
   [[ -n "$(modified_cask_files)" ]]
-}
-
-must_run_tests () {
-  [[ -n "$(modified_files_outside_casks)" ]]
 }
