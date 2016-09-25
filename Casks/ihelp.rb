@@ -2,7 +2,7 @@ cask 'ihelp' do
   version :latest
   sha256 :no_check
 
-  if MacOS.release < :yosemite
+  if MacOS.version <= :mavericks
     url 'http://dl.rmartijnr.eu/iHelp/iHelp.zip'
   else
     url 'http://dl.rmartijnr.eu/iHelp2/iHelp.zip'
