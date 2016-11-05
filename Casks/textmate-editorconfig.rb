@@ -7,7 +7,6 @@ cask 'textmate-editorconfig' do
           checkpoint: '383f3712d5a3fe4516fcc79350c7572ae00adc28530683993ec7d36e6556206c'
   name 'EditorConfig Plugin for TextMate'
   homepage 'https://github.com/Mr0grog/editorconfig-textmate'
-  license :oss
 
   plugin_name = 'editorconfig-textmate.tmplugin'
   textmate_bundles = File.expand_path('~/Library/Application Support/TextMate/Managed/Bundles/')

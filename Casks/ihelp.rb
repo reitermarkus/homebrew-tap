@@ -10,7 +10,6 @@ cask 'ihelp' do
 
   name 'iHelp'
   homepage 'http://www.rmartijnr.eu/iHelp/index.html'
-  license :freemium
 
   app 'iHelp.app'
 end

@@ -5,7 +5,6 @@ cask 'ilearn' do
   url 'http://dl.rmartijnr.eu/iLearn/iLearn.zip'
   name 'iLearn'
   homepage 'http://www.rmartijnr.eu/iLearn/index.html'
-  license :freemium
 
   app 'iLearn.app'
 end

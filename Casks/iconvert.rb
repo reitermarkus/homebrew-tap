@@ -5,7 +5,6 @@ cask 'iconvert' do
   url 'http://dl.rmartijnr.eu/iConvert/iConvert.zip'
   name 'iConvert'
   homepage 'http://www.rmartijnr.eu/iConvert/index.html'
-  license :gratis
 
   app 'iConvert.app'
 end
