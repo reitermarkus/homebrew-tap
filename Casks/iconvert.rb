@@ -4,7 +4,7 @@ cask 'iconvert' do
 
   url 'http://dl.rmartijnr.eu/iConvert/iConvert.zip'
   name 'iConvert'
-  homepage 'http://www.rmartijnr.eu/iConvert/index.html'
+  homepage 'http://www.rmartijnr.eu/iconvert.html'
 
   app 'iConvert.app'
 end
