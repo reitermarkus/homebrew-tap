@@ -1,8 +1,8 @@
 class RbenvSystemRuby < Formula
   desc "plugin to make rbenv compatible with the system Ruby"
   homepage "https://github.com/reitermarkus/rbenv-system-ruby"
-  url "https://github.com/reitermarkus/rbenv-system-ruby/archive/1.0.2.tar.gz"
-  sha256 "02b05603fb22fc213bcc6c44d2deac8ecd54938a31d08dfdd8ed5e58540854fd"
+  url "https://github.com/reitermarkus/rbenv-system-ruby/archive/1.0.3.tar.gz"
+  sha256 "632eea4f7c16e93e776a9d8502ca39283669a2036e593cf6bc6e6cdbacb00fee"
   head "https://github.com/reitermarkus/rbenv-system-ruby.git"
 
   bottle :unneeded
@@ -15,5 +15,6 @@ class RbenvSystemRuby < Formula
 
   test do
     assert_match "system-ruby.bash", shell_output("rbenv hooks exec")
+    assert_match "system-ruby.bash", shell_output("rbenv hooks rehash")
   end
 end
