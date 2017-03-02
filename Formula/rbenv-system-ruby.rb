@@ -1,8 +1,8 @@
 class RbenvSystemRuby < Formula
   desc "plugin to make rbenv compatible with the system Ruby"
   homepage "https://github.com/reitermarkus/rbenv-system-ruby"
-  url "https://github.com/reitermarkus/rbenv-system-ruby/archive/1.0.1.tar.gz"
-  sha256 "dbdafa6350b728ecd17fea809eac99df46050508dee4007efac58c7094334405"
+  url "https://github.com/reitermarkus/rbenv-system-ruby/archive/1.0.2.tar.gz"
+  sha256 "02b05603fb22fc213bcc6c44d2deac8ecd54938a31d08dfdd8ed5e58540854fd"
   head "https://github.com/reitermarkus/rbenv-system-ruby.git"
 
   bottle :unneeded
