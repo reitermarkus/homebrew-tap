@@ -2,10 +2,13 @@ class Openhab < Formula
   desc "Open Home Automation Bus"
   homepage "http://www.openhab.org/"
 
-  head "https://openhab.ci.cloudbees.com/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab-offline/target/openhab-offline-2.0.0-SNAPSHOT.tar.gz"
+  url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.0.0/openhab-2.0.0.zip"
+  sha256 "14e8fc652e9cb2cbeb9edd7930865c4f4277153d82eef43b14c12840b5e0244c"
+
+  head "https://openhab.ci.cloudbees.com/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab/target/openhab-2.1.0-SNAPSHOT.tar.gz"
 
   devel do
-    url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab%2Fdistro/openhab-offline/2.0.0.b5/openhab-offline-2.0.0.b5.tar.gz"
+    url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-offline/2.0.0.b5/openhab-offline-2.0.0.b5.tar.gz"
     version "2.0.0.b5"
     sha256 "8eadd4f815c608771a6b74ad5d49eae1ec4e18ef8dd5d32c130ba4d8f0766187"
   end
@@ -18,27 +21,33 @@ class Openhab < Formula
       s.gsub! "${OPENHAB_HOME}/userdata", var/"openhab"
       s.gsub! "${OPENHAB_USERDATA}/logs", "${OPENHAB_USERDATA}/log"
 
-      s.sub! /\n*\Z/, "\n\n[ -f #{etc}/openhab/setenv ] && . #{etc}/openhab/setenv\n"
+      s.sub! /\n*\Z/, "\n\n[ -f '#{etc}/openhab/setenv' ] && . '#{etc}/openhab/setenv'\n"
     end
 
     inreplace "start.sh", /DIRNAME=.*/, "DIRNAME=\"#{opt_prefix}\""
     bin.install "start.sh" => "openhab"
 
     rm "start_debug.sh"
-    rm_r Dir.glob("**/*.bat")
+    rm Dir.glob("**/*.bat")
 
-    if (etc/"openhab").exist?
-      rm_r "conf"
-    else
-      File.write "conf/setenv", "EXTRA_JAVA_OPTS=\"\"\n"
-      mv "conf", etc/"openhab"
+    Pathname.new("conf/setenv").write "EXTRA_JAVA_OPTS=\"\"\n"
+    Pathname.new("conf").cd do
+      Pathname.glob("**/*").reject(&:directory?).each do |file|
+        next if (etc/"openhab"/file).exist?
+        (etc/"openhab"/file.parent).mkpath
+        (etc/"openhab"/file.parent).install file
+      end
     end
+    rm_r "conf"
 
-    if (var/"openhab").exist?
-      rm_r "userdata"
-    else
-      mv "userdata", var/"openhab"
+    Pathname.new("userdata").cd do
+      Pathname.glob("**/*").reject(&:directory?).each do |file|
+        next if (var/"openhab"/file).exist?
+        (var/"openhab"/file.parent).mkpath
+        (var/"openhab"/file.parent).install file
+      end
     end
+    rm_r "userdata"
 
     (bin/"openhab-console").write <<-EOS.undent
       #!/bin/sh
