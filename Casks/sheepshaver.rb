@@ -4,7 +4,7 @@ cask 'sheepshaver' do
 
   url 'http://www.xs4all.nl/~ronaldpr/sheepshaverforum/SheepShaver_UB_20140201.zip'
   name 'SheepShaver'
-  homepage 'http://sheepshaver.cebix.net'
+  homepage 'http://sheepshaver.cebix.net/'
 
   app 'SheepShaver_UB_20140201/SheepShaver.app'
 end
