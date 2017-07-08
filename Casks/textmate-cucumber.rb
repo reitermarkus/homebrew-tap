@@ -8,9 +8,6 @@ cask 'textmate-cucumber' do
 
   plugin_name = 'Cucumber.tmbundle'
 
-  artifact plugin_name, target: "#{ENV['HOME']}/Library/Application Support/TextMate/Bundles/#{plugin_name}"
-
-  preflight do
-    FileUtils.mv staged_path.join('cucumber-tmbundle-master'), staged_path.join(plugin_name)
-  end
+  artifact 'cucumber-tmbundle-master',
+           target: "#{ENV['HOME']}/Library/Application Support/TextMate/Bundles/#{plugin_name}"
 end
