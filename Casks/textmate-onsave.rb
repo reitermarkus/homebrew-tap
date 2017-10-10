@@ -6,6 +6,6 @@ cask 'textmate-onsave' do
   name 'OnSave for TextMate'
   homepage 'https://github.com/reitermarkus/on-save.tmbundle'
 
-  artifact "on-save.tmbundle-master",
+  artifact 'on-save.tmbundle-master',
            target: "#{ENV['HOME']}/Library/Application Support/TextMate/Bundles/OnSave.tmbundle"
 end
