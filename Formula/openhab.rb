@@ -2,16 +2,8 @@ class Openhab < Formula
   desc "Open Home Automation Bus"
   homepage "http://www.openhab.org/"
 
-  url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.0.0/openhab-2.0.0.zip"
-  sha256 "14e8fc652e9cb2cbeb9edd7930865c4f4277153d82eef43b14c12840b5e0244c"
-
-  head "https://openhab.ci.cloudbees.com/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab/target/openhab-2.1.0-SNAPSHOT.tar.gz"
-
-  devel do
-    url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-offline/2.0.0.b5/openhab-offline-2.0.0.b5.tar.gz"
-    version "2.0.0.b5"
-    sha256 "8eadd4f815c608771a6b74ad5d49eae1ec4e18ef8dd5d32c130ba4d8f0766187"
-  end
+  url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.1.0/openhab-2.1.0.zip"
+  sha256 "d610b30dff353b3c5b3521b8a0f26ca5799803e762841ad9b17e9b2c8d53d1f4"
 
   depends_on :java
 
