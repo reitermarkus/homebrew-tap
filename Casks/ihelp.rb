@@ -2,7 +2,7 @@ cask 'ihelp' do
   version :latest
   sha256 :no_check
 
-  url 'https://github.com/reitermarkus/mirror/raw/master/iHelp.zip'
+  url 'https://github.com/reitermarkus/mirror/raw/master/iHelp.zip' # rubocop:disable Cask/HomepageMatchesUrl
   name 'iHelp'
   homepage 'http://www.rmartijnr.eu/iHelp/index.html'
 
