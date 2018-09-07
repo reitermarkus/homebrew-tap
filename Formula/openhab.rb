@@ -8,6 +8,11 @@ class Openhab < Formula
 
   bottle :unneeded
 
+  resource "stable-addons" do
+    url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-addons/2.3.0/openhab-addons-2.3.0.kar"
+    sha256 "3e1c92aa7ec1023975ec153509451e90a1fa05cbee3621dab1fb822f0180c50e"
+  end
+
   def install
     rm Dir["**/*.bat", "runtime/update*"]
 
@@ -28,6 +33,8 @@ class Openhab < Formula
     File.write "conf/setenv", <<~EOS
       EXTRA_JAVA_OPTS=""
     EOS
+
+    resource("stable-addons").stage share/"openhab2/addons"
 
     Pathname.new("conf").cd do
       Pathname.glob("**/*").reject(&:directory?).each do |path|
@@ -64,7 +71,7 @@ class Openhab < Formula
   def caveats
     <<~EOS
       To set custom environment variables, put them in
-        #{etc}/openhab/setenv
+        #{etc}/openhab2/setenv
 
       If this is your first install, automatically load on startup with:
         sudo cp #{opt_prefix}/#{plist_name}.plist /Library/LaunchDaemons
