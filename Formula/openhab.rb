@@ -1,56 +1,68 @@
 class Openhab < Formula
   desc "Open Home Automation Bus"
-  homepage "http://www.openhab.org/"
+  homepage "https://www.openhab.org/"
+  url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.3.0/openhab-2.3.0.zip"
+  sha256 "32bd9a69aa629bfca39134fe7ac1bc5701d8ff66cd18c61f56b3590598946670"
 
-  url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.1.0/openhab-2.1.0.zip"
-  sha256 "d610b30dff353b3c5b3521b8a0f26ca5799803e762841ad9b17e9b2c8d53d1f4"
+  depends_on :java => "1.8"
 
-  depends_on :java
+  bottle :unneeded
 
   def install
-    inreplace "runtime/bin/oh2_dir_layout" do |s|
-      s.gsub! "${OPENHAB_HOME}/conf", etc/"openhab"
-      s.gsub! "${OPENHAB_HOME}/userdata", var/"openhab"
-      s.gsub! "${OPENHAB_USERDATA}/logs", "${OPENHAB_USERDATA}/log"
+    rm Dir["**/*.bat", "runtime/update*"]
 
-      s.sub! /\n*\Z/, "\n\n[ -f '#{etc}/openhab/setenv' ] && . '#{etc}/openhab/setenv'\n"
-    end
+    # https://github.com/openhab/openhab-distro/pull/758
+    inreplace "runtime/bin/oh2_dir_layout", "${OPENHAB_BACKUP}", "${OPENHAB_BACKUPS}"
 
-    inreplace "start.sh", /DIRNAME=.*/, "DIRNAME=\"#{opt_prefix}\""
-    bin.install "start.sh" => "openhab"
-
-    rm "start_debug.sh"
-    rm Dir.glob("**/*.bat")
-
-    Pathname.new("conf/setenv").write "EXTRA_JAVA_OPTS=\"\"\n"
-    Pathname.new("conf").cd do
-      Pathname.glob("**/*").reject(&:directory?).each do |file|
-        next if (etc/"openhab"/file).exist?
-        (etc/"openhab"/file.parent).mkpath
-        (etc/"openhab"/file.parent).install file
-      end
-    end
-    rm_r "conf"
-
-    Pathname.new("userdata").cd do
-      Pathname.glob("**/*").reject(&:directory?).each do |file|
-        next if (var/"openhab"/file).exist?
-        (var/"openhab"/file.parent).mkpath
-        (var/"openhab"/file.parent).install file
-      end
-    end
-    rm_r "userdata"
-
-    (bin/"openhab-console").write <<-EOS.undent
-      #!/bin/sh
-      exec "#{prefix}/runtime/bin/client" "$@"
+    inreplace "runtime/bin/setenv", /\. "\$DIRNAME\/oh2_dir_layout"/, <<~EOS
+      export OPENHAB_CONF="#{etc}/openhab2"
+      export OPENHAB_USERDATA="#{var}/lib/openhab2"
+      export OPENHAB_LOGDIR="#{var}/log/openhab2"
+      export OPENHAB_BACKUPS="${OPENHAB_USERDATA}/backups"
+      \\0
     EOS
 
-    prefix.install Dir.glob("*")
+    # https://github.com/openhab/openhab-distro/pull/759
+    inreplace "runtime/bin/setenv", "/bin/true", "command true"
+
+    File.write "conf/setenv", <<~EOS
+      EXTRA_JAVA_OPTS=""
+    EOS
+
+    Pathname.new("conf").cd do
+      Pathname.glob("**/*").reject(&:directory?).each do |path|
+        next if (etc/"openhab2"/path).exist?
+        (etc/"openhab2"/path.parent).install path
+      end
+    end
+
+    Pathname.new("userdata").cd do
+      Pathname.glob("**/*").reject(&:directory?).each do |path|
+        next if (var/"lib/openhab2"/path).exist?
+        (var/"lib/openhab2"/path.parent).install path
+      end
+    end
+
+    (share/"openhab2").install "runtime"
+
+    bin.mkpath
+
+    ["client", "start", "stop", "restore", "status"].each do |executable|
+      (bin/"openhab-#{executable}").write <<~EOS
+        #!/bin/sh
+        exec "#{share}/openhab2/runtime/bin/#{executable}" "$@"
+      EOS
+      chmod "+x", bin/"openhab-#{executable}"
+    end
+
+    inreplace "start.sh", /DIRNAME=.*/, "DIRNAME=\"#{share}/openhab2\""
+    bin.install "start.sh" => "openhab"
+
+    prefix.install_metafiles
   end
 
   def caveats
-    <<-EOS.undent
+    <<~EOS
       To set custom environment variables, put them in
         #{etc}/openhab/setenv
 
@@ -70,35 +82,32 @@ class Openhab < Formula
     "org.openhab.daemon"
   end
 
-  def plist; <<-EOS.undent
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>Program</key>
-        <string>#{opt_bin}/openhab</string>
-        <key>OnDemand</key>
-        <false/>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>KeepAlive</key>
-        <true/>
-        <key>GID</key>
-        <integer>501</integer>
-        <key>UserName</key>
-        <string>root</string>
-        <key>StandardErrorPath</key>
-        <string>/dev/null</string>
-        <key>StandardOutPath</key>
-        <string>/dev/null</string>
-      </dict>
-    </plist>
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+        <dict>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>Program</key>
+          <string>#{opt_bin}/openhab</string>
+          <key>OnDemand</key>
+          <false/>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>KeepAlive</key>
+          <true/>
+          <key>GID</key>
+          <integer>501</integer>
+          <key>UserName</key>
+          <string>root</string>
+          <key>StandardErrorPath</key>
+          <string>/dev/null</string>
+          <key>StandardOutPath</key>
+          <string>/dev/null</string>
+        </dict>
+      </plist>
     EOS
-  end
-
-  test do
-    true
   end
 end
