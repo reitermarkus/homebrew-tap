@@ -24,6 +24,11 @@ class Openhab < Formula
       export OPENHAB_USERDATA="#{var}/lib/openhab2"
       export OPENHAB_LOGDIR="#{var}/log/openhab2"
       export OPENHAB_BACKUPS="${OPENHAB_USERDATA}/backups"
+
+      if [ -r "${OPENHAB_CONF}/setenv" ]; then
+        . "${OPENHAB_CONF}/setenv"
+      fi
+
       \\0
     EOS
 
