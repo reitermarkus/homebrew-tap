@@ -97,8 +97,11 @@ class Openhab < Formula
         <dict>
           <key>Label</key>
           <string>#{plist_name}</string>
-          <key>Program</key>
-          <string>#{opt_bin}/openhab</string>
+          <key>ProgramArguments</key>
+          <array>
+            <string>#{opt_bin}/openhab</string>
+            <string>server</string>
+          </array>
           <key>OnDemand</key>
           <false/>
           <key>RunAtLoad</key>
@@ -106,7 +109,7 @@ class Openhab < Formula
           <key>KeepAlive</key>
           <true/>
           <key>GID</key>
-          <integer>501</integer>
+          <integer>20</integer>
           <key>UserName</key>
           <string>root</string>
           <key>StandardErrorPath</key>
