@@ -113,9 +113,9 @@ class Openhab < Formula
           <key>UserName</key>
           <string>root</string>
           <key>StandardErrorPath</key>
-          <string>/dev/null</string>
+          <string>#{var}/log/openhab2/daemon.log</string>
           <key>StandardOutPath</key>
-          <string>/dev/null</string>
+          <string>#{var}/log/openhab2/daemon.log</string>
         </dict>
       </plist>
     EOS
