@@ -4,12 +4,12 @@ cask 'hardware-io-tools-for-xcode' do
 
   url do
     cookies = {
-      'ADCDownloadAuth' => URI.decode_www_form_component(ENV.fetch('HOMEBREW_ADC_DOWNLOAD_AUTH')),
-    }
+                'ADCDownloadAuth' => URI.decode_www_form_component(ENV.fetch('HOMEBREW_ADC_DOWNLOAD_AUTH')),
+              }
 
     [
       'https://download.developer.apple.com/Developer_Tools/Hardware_IO_Tools_for_Xcode_7.3/Hardware_IO_Tools_for_Xcode_7.3.dmg',
-      { cookies: cookies }
+      { cookies: cookies },
     ]
   end
   name 'Hardware IO Tools for Xcode 7.3'
