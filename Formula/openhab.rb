@@ -1,23 +1,19 @@
 class Openhab < Formula
   desc "Open Home Automation Bus"
   homepage "https://www.openhab.org/"
-  url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.3.0/openhab-2.3.0.zip"
-  sha256 "32bd9a69aa629bfca39134fe7ac1bc5701d8ff66cd18c61f56b3590598946670"
-
+  url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.4.0/openhab-2.4.0.zip"
+  sha256 "abaa07133c4cbd1c2971cb75b64b7eee930abf270e997041b4dccf9366bd89c2"
   depends_on :java => "1.8"
 
   bottle :unneeded
 
   resource "stable-addons" do
-    url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-addons/2.3.0/openhab-addons-2.3.0.kar"
-    sha256 "3e1c92aa7ec1023975ec153509451e90a1fa05cbee3621dab1fb822f0180c50e"
+    url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-addons/2.4.0/openhab-addons-2.4.0.kar"
+    sha256 "ccf72a5095fb01b09ea3b30de11465709bbfbc163ca92f48bc6a1d99137390fb"
   end
 
   def install
     rm Dir["**/*.bat", "runtime/update*"]
-
-    # https://github.com/openhab/openhab-distro/pull/758
-    inreplace "runtime/bin/oh2_dir_layout", "${OPENHAB_BACKUP}", "${OPENHAB_BACKUPS}"
 
     inreplace "runtime/bin/setenv", /\. "\$DIRNAME\/oh2_dir_layout"/, <<~EOS
       export OPENHAB_CONF="#{etc}/openhab2"
@@ -31,9 +27,6 @@ class Openhab < Formula
 
       \\0
     EOS
-
-    # https://github.com/openhab/openhab-distro/pull/759
-    inreplace "runtime/bin/setenv", "/bin/true", "command true"
 
     File.write "conf/setenv", <<~EOS
       EXTRA_JAVA_OPTS=""
