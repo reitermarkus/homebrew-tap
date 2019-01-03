@@ -3,7 +3,8 @@ class Openhab < Formula
   homepage "https://www.openhab.org/"
   url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.4.0/openhab-2.4.0.zip"
   sha256 "abaa07133c4cbd1c2971cb75b64b7eee930abf270e997041b4dccf9366bd89c2"
-  depends_on :java => "1.8"
+
+  depends_on :java => ["1.8", :optional]
 
   bottle :unneeded
 
