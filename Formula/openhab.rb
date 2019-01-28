@@ -17,9 +17,9 @@ class Openhab < Formula
     rm Dir["**/*.bat", "runtime/update*"]
 
     inreplace "runtime/bin/setenv", /\. "\$DIRNAME\/oh2_dir_layout"/, <<~EOS
-      export OPENHAB_CONF="#{etc}/openhab2"
-      export OPENHAB_USERDATA="#{var}/lib/openhab2"
-      export OPENHAB_LOGDIR="#{var}/log/openhab2"
+      export OPENHAB_CONF="#{etc}/openhab"
+      export OPENHAB_USERDATA="#{var}/openhab"
+      export OPENHAB_LOGDIR="${OPENHAB_USERDATA}/log"
       export OPENHAB_BACKUPS="${OPENHAB_USERDATA}/backups"
 
       if [ -r "${OPENHAB_CONF}/setenv" ]; then
@@ -33,35 +33,35 @@ class Openhab < Formula
       EXTRA_JAVA_OPTS=""
     EOS
 
-    resource("stable-addons").stage share/"openhab2/addons"
+    resource("stable-addons").stage share/"openhab/addons"
 
     Pathname.new("conf").cd do
       Pathname.glob("**/*").reject(&:directory?).each do |path|
-        next if (etc/"openhab2"/path).exist?
-        (etc/"openhab2"/path.parent).install path
+        next if (etc/"openhab"/path).exist?
+        (etc/"openhab"/path.parent).install path
       end
     end
 
     Pathname.new("userdata").cd do
       Pathname.glob("**/*").reject(&:directory?).each do |path|
-        next if (var/"lib/openhab2"/path).exist?
-        (var/"lib/openhab2"/path.parent).install path
+        next if (var/"openhab"/path).exist?
+        (var/"openhab"/path.parent).install path
       end
     end
 
-    (share/"openhab2").install "runtime"
+    (share/"openhab").install "runtime"
 
     bin.mkpath
 
     ["client", "start", "stop", "restore", "status"].each do |executable|
       (bin/"openhab-#{executable}").write <<~EOS
         #!/bin/sh
-        exec "#{share}/openhab2/runtime/bin/#{executable}" "$@"
+        exec "#{share}/openhab/runtime/bin/#{executable}" "$@"
       EOS
       chmod "+x", bin/"openhab-#{executable}"
     end
 
-    inreplace "start.sh", /DIRNAME=.*/, "DIRNAME=\"#{share}/openhab2\""
+    inreplace "start.sh", /DIRNAME=.*/, "DIRNAME=\"#{share}/openhab\""
     bin.install "start.sh" => "openhab"
 
     prefix.install_metafiles
@@ -70,7 +70,7 @@ class Openhab < Formula
   def caveats
     <<~EOS
       To set custom environment variables, put them in
-        #{etc}/openhab2/setenv
+        #{etc}/openhab/setenv
 
       If this is your first install, automatically load on startup with:
         sudo cp #{opt_prefix}/#{plist_name}.plist /Library/LaunchDaemons
@@ -112,9 +112,9 @@ class Openhab < Formula
           <key>UserName</key>
           <string>root</string>
           <key>StandardErrorPath</key>
-          <string>#{var}/log/openhab2/daemon.log</string>
+          <string>#{var}/openhab/log/daemon.log</string>
           <key>StandardOutPath</key>
-          <string>#{var}/log/openhab2/daemon.log</string>
+          <string>#{var}/openhab/log/daemon.log</string>
         </dict>
       </plist>
     EOS
