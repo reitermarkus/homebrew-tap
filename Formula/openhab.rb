@@ -1,43 +1,50 @@
 class Openhab < Formula
   desc "Open Home Automation Bus"
   homepage "https://www.openhab.org/"
-  url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.4.0/openhab-2.4.0.zip"
-  sha256 "abaa07133c4cbd1c2971cb75b64b7eee930abf270e997041b4dccf9366bd89c2"
-
-  depends_on :java => ["1.8", :optional]
+  url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab/2.5.0.M1/openhab-2.5.0.M1.zip"
+  version "2.5.0.M1"
+  sha256 "26b5f9ae66b2da3179706c8e2508f2803fa2de090bd57766a37ccc7486b7cf0a"
 
   bottle :unneeded
 
-  resource "stable-addons" do
-    url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-addons/2.4.0/openhab-addons-2.4.0.kar"
-    sha256 "ccf72a5095fb01b09ea3b30de11465709bbfbc163ca92f48bc6a1d99137390fb"
+  depends_on :java => ["1.8", :optional]
+
+  resource "addons" do
+    url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons/2.5.0.M1/openhab-addons-2.5.0.M1.kar"
+    sha256 "8ddee20968756a81660eaeee84765169d9d4c1bae1cb4f38a3a1c3f5d1dfdc85"
+  end
+
+  resource "addons-legacy" do
+    url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons-legacy/2.5.0.M1/openhab-addons-legacy-2.5.0.M1.kar"
+    sha256 "c9e205ee02e55f3a8bf7dc1d028874e91a7fcd2f320034e656349dc704354d16"
   end
 
   def install
     rm Dir["**/*.bat", "runtime/update*"]
 
-    inreplace "runtime/bin/setenv", /\. "\$DIRNAME\/oh2_dir_layout"/, <<~EOS
-      export OPENHAB_CONF="#{etc}/openhab"
-      export OPENHAB_USERDATA="#{var}/openhab"
-      export OPENHAB_LOGDIR="${OPENHAB_USERDATA}/log"
-      export OPENHAB_BACKUPS="${OPENHAB_USERDATA}/backups"
+    resource("addons").stage share/"openhab/addons"
+    resource("addons-legacy").stage share/"openhab/addons"
 
-      if [ -r "${OPENHAB_CONF}/setenv" ]; then
+    env = {
+      "OPENHAB_CONF"     => "#{etc}/openhab",
+      "OPENHAB_RUNTIME"  => "#{share}/openhab/runtime",
+      "OPENHAB_USERDATA" => "#{var}/openhab",
+      "OPENHAB_LOGDIR"   => "#{var}/openhab/log",
+      "OPENHAB_BACKUPS"  => "#{var}/openhab/backups",
+    }
+
+    inreplace "runtime/bin/setenv", %r{\. "\$DIRNAME/oh2_dir_layout"}, <<~EOS
+      if [ -f "${OPENHAB_CONF}/setenv" ]; then
         . "${OPENHAB_CONF}/setenv"
       fi
 
       \\0
     EOS
 
-    File.write "conf/setenv", <<~EOS
-      EXTRA_JAVA_OPTS=""
-    EOS
-
-    resource("stable-addons").stage share/"openhab/addons"
-
     Pathname.new("conf").cd do
       Pathname.glob("**/*").reject(&:directory?).each do |path|
         next if (etc/"openhab"/path).exist?
+
         (etc/"openhab"/path.parent).install path
       end
     end
@@ -45,6 +52,7 @@ class Openhab < Formula
     Pathname.new("userdata").cd do
       Pathname.glob("**/*").reject(&:directory?).each do |path|
         next if (var/"openhab"/path).exist?
+
         (var/"openhab"/path.parent).install path
       end
     end
@@ -54,15 +62,12 @@ class Openhab < Formula
     bin.mkpath
 
     ["client", "start", "stop", "restore", "status"].each do |executable|
-      (bin/"openhab-#{executable}").write <<~EOS
-        #!/bin/sh
-        exec "#{share}/openhab/runtime/bin/#{executable}" "$@"
-      EOS
-      chmod "+x", bin/"openhab-#{executable}"
+      (bin/"openhab-#{executable}").write_env_script("#{share}/openhab/runtime/bin/#{executable}", env)
     end
 
-    inreplace "start.sh", /DIRNAME=.*/, "DIRNAME=\"#{share}/openhab\""
-    bin.install "start.sh" => "openhab"
+    libexec.install "start.sh"
+
+    (bin/"openhab").write_env_script(libexec/"start.sh", env)
 
     prefix.install_metafiles
   end
