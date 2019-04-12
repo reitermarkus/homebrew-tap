@@ -1,6 +1,6 @@
 cask 'monitorcontrol' do
-  version '1.4.1'
-  sha256 '5bcbecc055353d1bc1c13c3026697c5699cb0f2942300209e0b973b5be227ec5'
+  version '1.5.0'
+  sha256 '0da9a1e9df8b4f88d6dffb4a3763325939e15021e5b2d8a9110d1d7be3a456ec'
 
   url "https://github.com/reitermarkus/MonitorControl/releases/download/#{version}/MonitorControl-#{version}.zip"
   appcast 'https://github.com/reitermarkus/MonitorControl/releases.atom'
