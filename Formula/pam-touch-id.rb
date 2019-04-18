@@ -1,9 +1,9 @@
 class PamTouchId < Formula
   desc "PAM module for TouchID"
   homepage "https://github.com/Reflejo/pam-touchID"
-  url "https://github.com/Reflejo/pam-touchID/archive/ee4fe83fc4aa50015dbcda7a0a5c72fa99798492.tar.gz"
+  url "https://github.com/reitermarkus/pam-touchID/archive/e918e3ad9b954a4b7b9ffd1d30999dee068fc9c6.tar.gz"
   version "2"
-  sha256 "386586d72edf8561a8b775db39d0126a17c3e9f6ae78c4d210b3ff8ca4f156f6"
+  sha256 "fd9c56739368cb029cce3576d87bcf5a286a1b3c2fcedfc9161973eda6363d04"
 
   keg_only "it needs to be installed manually as root"
 
