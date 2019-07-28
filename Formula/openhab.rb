@@ -1,7 +1,6 @@
 class Openhab < Formula
   desc "Open Home Automation Bus"
   homepage "https://www.openhab.org/"
-  url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab/2.5.0.M1/openhab-2.5.0.M1.zip"
   version "2.5.0.M1"
   sha256 "26b5f9ae66b2da3179706c8e2508f2803fa2de090bd57766a37ccc7486b7cf0a"
 
@@ -9,14 +8,30 @@ class Openhab < Formula
 
   depends_on :java => ["1.8", :optional]
 
-  resource "addons" do
-    url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons/2.5.0.M1/openhab-addons-2.5.0.M1.kar"
-    sha256 "8ddee20968756a81660eaeee84765169d9d4c1bae1cb4f38a3a1c3f5d1dfdc85"
+  stable do
+    url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab/2.5.0.M1/openhab-2.5.0.M1.zip"
+
+    resource "addons" do
+      url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons/2.5.0.M1/openhab-addons-2.5.0.M1.kar"
+      sha256 "8ddee20968756a81660eaeee84765169d9d4c1bae1cb4f38a3a1c3f5d1dfdc85"
+    end
+
+    resource "addons-legacy" do
+      url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons-legacy/2.5.0.M1/openhab-addons-legacy-2.5.0.M1.kar"
+      sha256 "c9e205ee02e55f3a8bf7dc1d028874e91a7fcd2f320034e656349dc704354d16"
+    end
   end
 
-  resource "addons-legacy" do
-    url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons-legacy/2.5.0.M1/openhab-addons-legacy-2.5.0.M1.kar"
-    sha256 "c9e205ee02e55f3a8bf7dc1d028874e91a7fcd2f320034e656349dc704354d16"
+  head do
+    url "https://ci.openhab.org/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab/target/openhab-2.5.0-SNAPSHOT.zip"
+
+    resource "addons" do
+      url "https://ci.openhab.org/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab-addons/target/openhab-addons-2.5.0-SNAPSHOT.kar"
+    end
+
+    resource "addons-legacy" do
+      url "https://ci.openhab.org/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab-addons-legacy/target/openhab-addons-legacy-2.5.0-SNAPSHOT.kar"
+    end
   end
 
   def install
