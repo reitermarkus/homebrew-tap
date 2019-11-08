@@ -1,24 +1,38 @@
 class Openhab < Formula
   desc "Open Home Automation Bus"
   homepage "https://www.openhab.org/"
-  version "2.5.0.M1"
-  sha256 "26b5f9ae66b2da3179706c8e2508f2803fa2de090bd57766a37ccc7486b7cf0a"
 
   bottle :unneeded
 
-  depends_on :java => ["1.8", :optional]
+  depends_on "openjdk@11"
 
   stable do
-    url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab/2.5.0.M1/openhab-2.5.0.M1.zip"
+    url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.4.0/openhab-2.4.0.zip"
+    sha256 "abaa07133c4cbd1c2971cb75b64b7eee930abf270e997041b4dccf9366bd89c2"
 
     resource "addons" do
-      url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons/2.5.0.M1/openhab-addons-2.5.0.M1.kar"
-      sha256 "8ddee20968756a81660eaeee84765169d9d4c1bae1cb4f38a3a1c3f5d1dfdc85"
+      url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-addons/2.4.0/openhab-addons-2.4.0.kar"
+      sha256 "ccf72a5095fb01b09ea3b30de11465709bbfbc163ca92f48bc6a1d99137390fb"
     end
 
     resource "addons-legacy" do
-      url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons-legacy/2.5.0.M1/openhab-addons-legacy-2.5.0.M1.kar"
-      sha256 "c9e205ee02e55f3a8bf7dc1d028874e91a7fcd2f320034e656349dc704354d16"
+      url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-addons-legacy/2.4.0/openhab-addons-legacy-2.4.0.kar"
+      sha256 "21218e723b04ab82cc674acdb66c3825be24ac3c82cbaad4fa25287ac1b2ff8b"
+    end
+  end
+
+  devel do
+    url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab/2.5.0.M4/openhab-2.5.0.M4.zip"
+    sha256 "e34ce235a9c6212ce6214fcdc00b325dea405ac7625f47ea604135194349bfa4"
+
+    resource "addons" do
+      url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons/2.5.0.M4/openhab-addons-2.5.0.M4.kar"
+      sha256 "942577c1f3cb0ab49992607f842d166c88b94cb3ba4daa9f976cda61f2ae96ef"
+    end
+
+    resource "addons-legacy" do
+      url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons-legacy/2.5.0.M4/openhab-addons-legacy-2.5.0.M4.kar"
+      sha256 "6f7b8a282701b6202963accc26e2045f9c673ea615f17758d42393f540c6e002"
     end
   end
 
@@ -35,17 +49,15 @@ class Openhab < Formula
   end
 
   def install
-    rm Dir["**/*.bat", "runtime/update*"]
-
-    resource("addons").stage share/"openhab/addons"
-    resource("addons-legacy").stage share/"openhab/addons"
+    rm Dir["**/*.bat", "**/*.ps1", "**/*.psm1"]
+    rm "runtime/bin/update"
 
     env = {
-      "OPENHAB_CONF"     => "#{etc}/openhab",
-      "OPENHAB_RUNTIME"  => "#{share}/openhab/runtime",
-      "OPENHAB_USERDATA" => "#{var}/openhab",
-      "OPENHAB_LOGDIR"   => "#{var}/openhab/log",
-      "OPENHAB_BACKUPS"  => "#{var}/openhab/backups",
+      "OPENHAB_CONF"     => etc/"openhab",
+      "OPENHAB_USERDATA" => var/"openhab",
+      "OPENHAB_LOGDIR"   => var/"openhab/log",
+      "OPENHAB_BACKUPS"  => var/"openhab/backups",
+      "JAVA_HOME"        => Formula["openjdk@11"].opt_libexec/"openjdk.jdk/Contents/Home",
     }
 
     inreplace "runtime/bin/setenv", %r{\. "\$DIRNAME/oh2_dir_layout"}, <<~EOS
@@ -72,15 +84,16 @@ class Openhab < Formula
       end
     end
 
-    (share/"openhab").install "runtime"
+    resource("addons").stage libexec/"addons"
+    resource("addons-legacy").stage libexec/"addons"
+    libexec.install "runtime"
+    libexec.install "start.sh"
 
     bin.mkpath
 
-    ["client", "start", "stop", "restore", "status"].each do |executable|
-      (bin/"openhab-#{executable}").write_env_script("#{share}/openhab/runtime/bin/#{executable}", env)
+    %w[client start stop restore status].each do |executable|
+      (bin/"openhab-#{executable}").write_env_script("#{libexec}/runtime/bin/#{executable}", env)
     end
-
-    libexec.install "start.sh"
 
     (bin/"openhab").write_env_script(libexec/"start.sh", env)
 
