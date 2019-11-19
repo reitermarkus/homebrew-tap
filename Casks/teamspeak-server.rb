@@ -1,6 +1,6 @@
 cask 'teamspeak-server' do
-  version '3.9.1'
-  sha256 'f7a4d24e128cf1026c570ef4c498330f55fa818ec874784471954f1771a32f05'
+  version '3.10.0'
+  sha256 '7d27251bf7f173ad0a60d4a7c956aade518a6a6335ba90657ddd2ef0f3ef5746'
 
   # teamspeak-services.com was verified as official when first introduced to the cask
   url "https://files.teamspeak-services.com/releases/server/#{version}/teamspeak3-server_mac-#{version}.zip"
