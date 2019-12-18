@@ -2,13 +2,14 @@ class Flutter < Formula
   desc "Portable UI toolkit for building native applications"
   homepage "https://flutter.dev"
   url "https://github.com/flutter/flutter.git",
-    :tag      => "v1.9.1+hotfix.6",
-    :revision => "68587a0916366e9512a78df22c44163d041dd5f3"
-  version "1.9.1+hotfix.6"
+    :tag      => "v1.12.13+hotfix.5",
+    :revision => "27321ebbad34b0a3fafe99fac037102196d655ff"
+  version "1.12.13+hotfix.5"
 
   resource "dart-sdk" do
-    url "https://storage.googleapis.com/flutter_infra/flutter/b863200c37df4ed378042de11c4e9ff34e4e58c9/dart-sdk-darwin-x64.zip"
-    sha256 "7c38768ec00b1b4207c44105a69cdf7425d947c34f681e2104c7afb839d64157"
+    # Hash can be found in `flutter/bin/internal/engine.version`.
+    url "https://storage.googleapis.com/flutter_infra/flutter/2994f7e1e682039464cb25e31a78b86a3c59b695/dart-sdk-darwin-x64.zip"
+    sha256 "9c5ce77347df40c15ecff7e486d28a0ae0aba7f8645c19836f7ebded82652a32"
   end
 
   depends_on "libzip"
