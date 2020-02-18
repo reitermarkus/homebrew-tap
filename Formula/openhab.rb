@@ -7,44 +7,29 @@ class Openhab < Formula
   depends_on "openjdk@11"
 
   stable do
-    url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.4.0/openhab-2.4.0.zip"
-    sha256 "abaa07133c4cbd1c2971cb75b64b7eee930abf270e997041b4dccf9366bd89c2"
+    url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.5.1/openhab-2.5.1.zip"
+    sha256 "38541e39b06b37e801e98748a1b8dbce3574be49867d9314c64dbdb818ca8008"
 
     resource "addons" do
-      url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-addons/2.4.0/openhab-addons-2.4.0.kar"
-      sha256 "ccf72a5095fb01b09ea3b30de11465709bbfbc163ca92f48bc6a1d99137390fb"
+      url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-addons/2.5.1/openhab-addons-2.5.1.kar"
+      sha256 "2d61a4d2506c686c8cf16e71dad3ffc76a8e6018d83696628868e0419c4f9f50"
     end
 
     resource "addons-legacy" do
-      url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-addons-legacy/2.4.0/openhab-addons-legacy-2.4.0.kar"
-      sha256 "21218e723b04ab82cc674acdb66c3825be24ac3c82cbaad4fa25287ac1b2ff8b"
-    end
-  end
-
-  devel do
-    url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab/2.5.0.M4/openhab-2.5.0.M4.zip"
-    sha256 "e34ce235a9c6212ce6214fcdc00b325dea405ac7625f47ea604135194349bfa4"
-
-    resource "addons" do
-      url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons/2.5.0.M4/openhab-addons-2.5.0.M4.kar"
-      sha256 "942577c1f3cb0ab49992607f842d166c88b94cb3ba4daa9f976cda61f2ae96ef"
-    end
-
-    resource "addons-legacy" do
-      url "https://openhab.jfrog.io/openhab/libs-milestone-local/org/openhab/distro/openhab-addons-legacy/2.5.0.M4/openhab-addons-legacy-2.5.0.M4.kar"
-      sha256 "6f7b8a282701b6202963accc26e2045f9c673ea615f17758d42393f540c6e002"
+      url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab-addons-legacy/2.5.1/openhab-addons-legacy-2.5.1.kar"
+      sha256 "2371af339e76827d040e5a877a6ebcb89aad0cb4ed7c4113cb03ba924e999768"
     end
   end
 
   head do
-    url "https://ci.openhab.org/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab/target/openhab-2.5.0-SNAPSHOT.zip"
+    url "https://ci.openhab.org/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab/target/openhab-2.5.2-SNAPSHOT.zip"
 
     resource "addons" do
-      url "https://ci.openhab.org/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab-addons/target/openhab-addons-2.5.0-SNAPSHOT.kar"
+      url "https://ci.openhab.org/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab-addons/target/openhab-addons-2.5.2-SNAPSHOT.kar"
     end
 
     resource "addons-legacy" do
-      url "https://ci.openhab.org/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab-addons-legacy/target/openhab-addons-legacy-2.5.0-SNAPSHOT.kar"
+      url "https://ci.openhab.org/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab-addons-legacy/target/openhab-addons-legacy-2.5.2-SNAPSHOT.kar"
     end
   end
 
@@ -57,7 +42,7 @@ class Openhab < Formula
       "OPENHAB_USERDATA" => var/"openhab",
       "OPENHAB_LOGDIR"   => var/"openhab/log",
       "OPENHAB_BACKUPS"  => var/"openhab/backups",
-      "JAVA_HOME"        => Formula["openjdk@11"].opt_libexec/"openjdk.jdk/Contents/Home",
+      "JAVA_HOME"        => Formula["openjdk@11"].opt_prefix,
     }
 
     inreplace "runtime/bin/setenv", %r{\. "\$DIRNAME/oh2_dir_layout"}, <<~EOS
