@@ -17,11 +17,16 @@ cask "teamspeak-server" do
   preflight do
     FileUtils.mkdir_p config_dir
 
-    FileUtils.ln_sf staged_path.join("teamspeak3-server_mac/libts3_ssh.dylib"), config_dir.join("libts3_ssh.dylib")
-    FileUtils.ln_sf staged_path.join("teamspeak3-server_mac/libts3db_mariadb.dylib"), config_dir.join("libts3db_mariadb.dylib")
-    FileUtils.ln_sf staged_path.join("teamspeak3-server_mac/libts3db_sqlite3.dylib"), config_dir.join("libts3db_sqlite3.dylib")
-    FileUtils.ln_sf staged_path.join("teamspeak3-server_mac/redist"), config_dir.join("redist")
-    FileUtils.ln_sf staged_path.join("teamspeak3-server_mac/sql"), config_dir.join("sql")
+    FileUtils.ln_sf staged_path.join("teamspeak3-server_mac/libts3_ssh.dylib"),
+                    config_dir.join("libts3_ssh.dylib")
+    FileUtils.ln_sf staged_path.join("teamspeak3-server_mac/libts3db_mariadb.dylib"),
+                    config_dir.join("libts3db_mariadb.dylib")
+    FileUtils.ln_sf staged_path.join("teamspeak3-server_mac/libts3db_sqlite3.dylib"),
+                    config_dir.join("libts3db_sqlite3.dylib")
+    FileUtils.ln_sf staged_path.join("teamspeak3-server_mac/redist"),
+                    config_dir.join("redist")
+    FileUtils.ln_sf staged_path.join("teamspeak3-server_mac/sql"),
+                    config_dir.join("sql")
 
     IO.write shimscript, <<~EOS
       #!/bin/sh
