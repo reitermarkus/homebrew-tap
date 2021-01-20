@@ -7,4 +7,8 @@ cask "iconvert" do
   homepage "http://www.rmartijnr.eu/iconvert.html"
 
   app "iConvert.app"
+
+  caveats do
+    discontinued
+  end
 end

@@ -7,4 +7,8 @@ cask "itest" do
   homepage "http://www.rmartijnr.eu/iTest/index.html"
 
   app "iTest.app"
+
+  caveats do
+    discontinued
+  end
 end

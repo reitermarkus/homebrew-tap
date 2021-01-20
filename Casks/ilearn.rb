@@ -7,4 +7,8 @@ cask "ilearn" do
   homepage "http://www.rmartijnr.eu/iLearn/index.html"
 
   app "iLearn.app"
+
+  caveats do
+    discontinued
+  end
 end
