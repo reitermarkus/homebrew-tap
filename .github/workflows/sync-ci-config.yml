@@ -43,5 +43,5 @@ jobs:
           title: Synchronize CI configuration from `homebrew/cask`.
           body: >
             This pull request was created automatically by the
-            [`sync-templates-and-ci-config`](https://github.com/reitermarkus/homebrew-tap/blob/master/.github/workflows/sync-ci-config.yml)
+            [`sync-ci-config`](https://github.com/reitermarkus/homebrew-tap/blob/master/.github/workflows/sync-ci-config.yml)
             workflow.
