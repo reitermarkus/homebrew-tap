@@ -39,7 +39,7 @@ jobs:
         uses: peter-evans/create-pull-request@45c510e1f68ba052e3cd911f661a799cfb9ba3a3
         with:
           token: ${{ steps.generate_token.outputs.token }}
-          branch: sync-templates-and-ci-config
+          branch: sync-ci-config
           title: Synchronize CI configuration from `homebrew/cask`.
           body: >
             This pull request was created automatically by the
