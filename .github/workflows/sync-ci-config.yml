@@ -38,4 +38,3 @@ jobs:
             This pull request was created automatically by the
             [`sync-templates-and-ci-config`](https://github.com/reitermarkus/homebrew-tap/blob/master/.github/workflows/sync-ci-config.yml)
             workflow.
-        if: ${{ steps.detect_changes.outputs.pull_request == 'true' }}
