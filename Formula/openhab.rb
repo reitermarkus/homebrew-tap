@@ -2,10 +2,6 @@ class Openhab < Formula
   desc "Open Home Automation Bus"
   homepage "https://www.openhab.org/"
 
-  bottle :unneeded
-
-  depends_on "openjdk@11"
-
   stable do
     url "https://bintray.com/openhab/mvn/download_file?file_path=org/openhab/distro/openhab/2.5.1/openhab-2.5.1.zip"
     sha256 "38541e39b06b37e801e98748a1b8dbce3574be49867d9314c64dbdb818ca8008"
@@ -32,6 +28,10 @@ class Openhab < Formula
       url "https://ci.openhab.org/job/openHAB-Distribution/lastSuccessfulBuild/artifact/distributions/openhab-addons-legacy/target/openhab-addons-legacy-2.5.2-SNAPSHOT.kar"
     end
   end
+
+  bottle :unneeded
+
+  depends_on "openjdk@11"
 
   def install
     rm Dir["**/*.bat", "**/*.ps1", "**/*.psm1"]
@@ -100,7 +100,7 @@ class Openhab < Formula
     EOS
   end
 
-  plist_options :startup => true, :manual => "openhab"
+  plist_options startup: true, manual: "openhab"
 
   def plist_name
     "org.openhab.daemon"

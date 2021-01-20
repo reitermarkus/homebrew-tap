@@ -51,7 +51,7 @@ class ChapelMpi < Formula
       Hardware::CPU.is_64_bit? ? "linux64-x86_64" : "linux-x86_64"
     end
     bin.install Dir[libexec/"bin/#{platform}/*"]
-    bin.env_script_all_files libexec/"bin/#{platform}/", :CHPL_HOME => ENV["CHPL_HOME"]
+    bin.env_script_all_files libexec/"bin/#{platform}/", CHPL_HOME: ENV["CHPL_HOME"]
     man1.install_symlink Dir["#{libexec}/man/man1/*.1"]
   end
 

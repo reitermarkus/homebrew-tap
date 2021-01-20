@@ -2,17 +2,17 @@ class Flutter < Formula
   desc "Portable UI toolkit for building native applications"
   homepage "https://flutter.dev"
   url "https://github.com/flutter/flutter.git",
-    :tag      => "v1.12.13+hotfix.5",
-    :revision => "27321ebbad34b0a3fafe99fac037102196d655ff"
+    tag:      "v1.12.13+hotfix.5",
+    revision: "27321ebbad34b0a3fafe99fac037102196d655ff"
   version "1.12.13+hotfix.5"
+
+  depends_on "libzip"
 
   resource "dart-sdk" do
     # Hash can be found in `flutter/bin/internal/engine.version`.
     url "https://storage.googleapis.com/flutter_infra/flutter/2994f7e1e682039464cb25e31a78b86a3c59b695/dart-sdk-darwin-x64.zip"
     sha256 "9c5ce77347df40c15ecff7e486d28a0ae0aba7f8645c19836f7ebded82652a32"
   end
-
-  depends_on "libzip"
 
   def install
     rm Dir["**/*.bat", "**/*.ps1"]

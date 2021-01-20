@@ -1,10 +1,10 @@
 class SudoTouchid < Formula
-  desc "A fork of `sudo` with Touch ID support."
+  desc "Fork of `sudo` with Touch ID support"
   homepage "https://github.com/mattrajca/sudo-touchid"
   head "https://github.com/mattrajca/sudo-touchid.git"
 
-  depends_on :macos => :sierra
-  depends_on :xcode => :build
+  depends_on xcode: :build
+  depends_on macos: :sierra
 
   def install
     xcodebuild "-project", "sudo.xcodeproj",
