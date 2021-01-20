@@ -3,7 +3,7 @@ name: Sync CI config from `homebrew/cask`.
 on:
   push:
     paths:
-      - .github/workflows/sync-ci.yml
+      - .github/workflows/sync-ci-config.yml
   schedule:
     - cron: '0 0 * * *' # daily
 
