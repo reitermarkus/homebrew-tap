@@ -1,0 +1,41 @@
+name: Sync CI config from `homebrew/cask`.
+
+on:
+  push:
+    paths:
+      - .github/workflows/sync-ci.yml
+  schedule:
+    - cron: '0 0 * * *' # daily
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone main repository
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Clone secondary repository
+        uses: actions/checkout@v2
+        with:
+          repository: Homebrew/homebrew-cask
+          path: homebrew-cask
+          persist-credentials: false
+
+      - name: Copy CI config
+        run: |
+          cp -f homebrew-cask/.github/workflows/ci.yml .github/workflows/ci.yml
+          rm -r homebrew-cask
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@45c510e1f68ba052e3cd911f661a799cfb9ba3a3
+        with:
+          token: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+          branch: sync-templates-and-ci-config
+          title: Synchronize CI configuration from `homebrew/cask`.
+          body: >
+            This pull request was created automatically by the
+            [`sync-templates-and-ci-config`](https://github.com/reitermarkus/homebrew-tap/blob/master/.github/workflows/sync-ci-config.yml)
+            workflow.
+        if: ${{ steps.detect_changes.outputs.pull_request == 'true' }}
