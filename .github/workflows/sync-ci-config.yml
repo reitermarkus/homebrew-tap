@@ -28,10 +28,17 @@ jobs:
           cp -f homebrew-cask/.github/workflows/ci.yml .github/workflows/ci.yml
           rm -r homebrew-cask
 
+      - name: Generate app token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Create pull request
         uses: peter-evans/create-pull-request@45c510e1f68ba052e3cd911f661a799cfb9ba3a3
         with:
-          token: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+          token: ${{ steps.generate_token.outputs.token }}
           branch: sync-templates-and-ci-config
           title: Synchronize CI configuration from `homebrew/cask`.
           body: >
