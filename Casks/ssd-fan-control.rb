@@ -6,6 +6,12 @@ cask "ssd-fan-control" do
   name "SSD Fan Control"
   homepage "http://exirion.net/ssdfanctrl/"
 
+  livecheck do
+    url :homepage
+    strategy :page_match
+    regex(%r{href=.*?/SSDFanControl-(\d+(?:\.\d+)*)\.dmg}i)
+  end
+
   pkg "SSD Fan Control.pkg"
 
   uninstall pkgutil: "net.exirion.pkg.SSDFanControl"
