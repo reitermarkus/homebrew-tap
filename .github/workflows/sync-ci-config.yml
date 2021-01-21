@@ -45,3 +45,5 @@ jobs:
             This pull request was created automatically by the
             [`sync-ci-config`](https://github.com/reitermarkus/homebrew-tap/blob/master/.github/workflows/sync-ci-config.yml)
             workflow.
+          commit-message: Update `ci.yml`.
+          author: Markus Reiter <me@reitermark.us>
