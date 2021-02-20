@@ -1,10 +1,8 @@
 cask "virtualkvm" do
-  version "1.1.3"
-  sha256 "6e4fccd8640838b7ef372205d6fe812c64ef185b7f53265588cd18471c4c1f0a"
+  version "1.2.4"
+  sha256 "efe0c3b976464488de7cfdfe2fd55cab0feda4933f7065a025f04e55c515bb72"
 
-  url "https://github.com/alvaromurillo/VirtualKVM/releases/download/#{version}/VirtualKVM.zip"
-  appcast "https://github.com/alvaromurillo/VirtualKVM/releases.atom",
-          checkpoint: "60aab944b2c2637226a543b6b95c20fc3ff1d9ad90ff7f929fcdb93ee33e233f"
+  url "https://github.com/duanefields/VirtualKVM/releases/download/v#{version}/v#{version.dots_to_underscores}.zip"
   name "VirtualKVM"
   homepage "https://github.com/duanefields/VirtualKVM"
 

@@ -1,12 +1,17 @@
 cask "teamspeak-server" do
-  version "3.10.2"
-  sha256 "9cdd58866155ee5a6e54ca00e9b6786c666e5f2fc337e5d42230a4eb58264894"
+  version "3.13.3"
+  sha256 "6731a723737b0662aec9127710399f32d1bdcdffc1c33a419404cf6a54fa3ee7"
 
-  # teamspeak-services.com was verified as official when first introduced to the cask
-  url "https://files.teamspeak-services.com/releases/server/#{version}/teamspeak3-server_mac-#{version}.zip"
-  appcast "https://files.teamspeak-services.com/releases/server/"
+  url "https://files.teamspeak-services.com/releases/server/#{version}/teamspeak3-server_mac-#{version}.zip",
+      verified: "teamspeak-services.com"
   name "TeamSpeak Server"
   homepage "https://teamspeak.com/"
+
+  livecheck do
+    url "https://files.teamspeak-services.com/releases/server/"
+    strategy :page_match
+    regex(/href="?(\d+(?:\.\d+)*)/)
+  end
 
   # shim script (https://github.com/Homebrew/homebrew-cask/issues/18809)
   shimscript = "#{staged_path}/ts3server.wrapper.sh"
