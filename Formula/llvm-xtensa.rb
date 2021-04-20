@@ -1,4 +1,4 @@
-  class LlvmXtensa < Formula
+class LlvmXtensa < Formula
   desc "Next-gen compiler infrastructure"
   homepage "https://llvm.org/"
   # The LLVM Project is under the Apache License v2.0 with LLVM Exceptions
@@ -7,7 +7,7 @@
 
   stable do
     url "https://github.com/espressif/llvm-project.git",
-        branch: "xtensa_release_11.0.0",
+        branch:   "xtensa_release_11.0.0",
         revision: "66e092dba54a019d057ca55ceae7264b92d394a7"
     version "11.0.0"
 

@@ -5,7 +5,7 @@ class RustXtensa < Formula
 
   stable do
     url "https://github.com/reitermarkus/rust.git",
-        branch: "xtensa-support",
+        branch:   "xtensa-support",
         revision: "9add94154d2469c67ad00a7fcd829fb10b0186f9"
     version "1.50.0"
 
@@ -20,9 +20,9 @@ class RustXtensa < Formula
   depends_on "ninja" => :build
   depends_on "python@3.9" => :build
   depends_on "libssh2"
+  depends_on "llvm-xtensa"
   depends_on "openssl@1.1"
   depends_on "pkg-config"
-  depends_on "llvm-xtensa"
 
   uses_from_macos "curl"
   uses_from_macos "zlib"
