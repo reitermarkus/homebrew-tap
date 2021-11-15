@@ -29,8 +29,6 @@ class Openhab < Formula
     end
   end
 
-  bottle :unneeded
-
   depends_on "openjdk@11"
 
   def install

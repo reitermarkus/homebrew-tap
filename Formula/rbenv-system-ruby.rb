@@ -5,8 +5,6 @@ class RbenvSystemRuby < Formula
   sha256 "0d06ee1ad33b988cba2d27511ab487940bf0c1bf968cd6fd0bffc1b054ca3c01"
   head "https://github.com/reitermarkus/rbenv-system-ruby.git"
 
-  bottle :unneeded
-
   depends_on "rbenv"
 
   def install

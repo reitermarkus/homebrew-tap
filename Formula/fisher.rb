@@ -5,8 +5,6 @@ class Fisher < Formula
   url "https://github.com/jorgebucaran/fisher/archive/3.2.10.tar.gz"
   sha256 "63827f63bd998b9b66e47d934cf21e3211f8fbd285abc7e9fbc8fc203655c23c"
 
-  bottle :unneeded
-
   depends_on "fish"
 
   def install
