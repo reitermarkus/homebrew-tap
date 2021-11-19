@@ -2,24 +2,18 @@ class Fisher < Formula
   desc "Plugin manager for the Fish shell"
   homepage "https://github.com/jorgebucaran/fisher"
 
-  url "https://github.com/jorgebucaran/fisher/archive/3.2.10.tar.gz"
-  sha256 "63827f63bd998b9b66e47d934cf21e3211f8fbd285abc7e9fbc8fc203655c23c"
+  url "https://github.com/jorgebucaran/fisher/archive/4.3.0.tar.gz"
+  sha256 "6235cfc636c8d52f11feca9f4931656a9c6602659b06df8dba5a3606d37f8c28"
 
   depends_on "fish"
 
   def install
-    inreplace "fisher.fish" do |s|
-      s.gsub! "case self-update", "case self-update-disabled"
-      s.gsub! "case self-uninstall", "case self-uninstall-disabled"
-      s.gsub! "$fisher_path/completions/fisher.fish", "#{fish_completion}/fisher.fish"
-    end
-
-    fish_function.install "fisher.fish"
-    (fish_completion/"fisher.fish").write "fisher complete\n"
+    fish_function.install "functions/fisher.fish"
+    fish_completion.install "completions/fisher.fish"
   end
 
   test do
-    system "#{Formula["fish"].bin}/fish", "-c", "fisher add jethrokuan/z"
-    assert_equal File.read(testpath/".config/fish/fishfile"), "jethrokuan/z\n"
+    system "#{Formula["fish"].bin}/fish", "-c", "fisher install jethrokuan/z"
+    assert_equal File.read(testpath/".config/fish/fish_plugins"), "jethrokuan/z\n"
   end
 end
