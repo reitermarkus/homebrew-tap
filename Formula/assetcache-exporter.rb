@@ -1,0 +1,19 @@
+class AssetcacheExporter < Formula
+  desc "Prometheus exporter for AssetCache"
+  homepage "https://github.com/reitermarkus/assetcache-exporter"
+  head "https://github.com/reitermarkus/assetcache-exporter.git", branch: 'main'
+
+  depends_on "ruby"
+
+  def install
+    ENV["GEM_HOME"] = libexec
+    system "bundle", "install"
+    (libexec/"bin").install "assetcache_exporter.rb"
+    (bin/"assetcache_exporter").write_env_script libexec/"bin/assetcache_exporter.rb",
+                                                 GEM_HOME: ENV["GEM_HOME"]
+  end
+
+  test do
+    system "true"
+  end
+end
