@@ -1,7 +1,7 @@
 class AssetcacheExporter < Formula
   desc "Prometheus exporter for AssetCache"
-  homepage "https://github.com/reitermarkus/assetcache-exporter"
-  head "https://github.com/reitermarkus/assetcache-exporter.git", branch: "main"
+  homepage "https://github.com/reitermarkus/assetcache_exporter"
+  head "https://github.com/reitermarkus/assetcache_exporter.git", branch: "main"
 
   depends_on "ruby"
 
