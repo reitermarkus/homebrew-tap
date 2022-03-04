@@ -36,7 +36,7 @@ jobs:
           private_key: ${{ secrets.GH_APP_KEY }}
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@45c510e1f68ba052e3cd911f661a799cfb9ba3a3
+        uses: peter-evans/create-pull-request@18f7dc018cc2cd597073088f7c7591b9d1c02672
         with:
           token: ${{ steps.generate_token.outputs.token }}
           branch: sync-ci-config
