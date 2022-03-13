@@ -3,7 +3,7 @@ cask "ihelp" do
   sha256 :no_check
 
   url "https://github.com/reitermarkus/mirror/raw/HEAD/iHelp.zip",
-    verified: "https://github.com/reitermarkus/mirror/"
+      verified: "https://github.com/reitermarkus/mirror/"
   name "iHelp"
   homepage "http://www.rmartijnr.eu/iHelp/index.html"
 
