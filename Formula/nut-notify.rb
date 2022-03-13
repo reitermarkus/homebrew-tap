@@ -3,6 +3,7 @@ class NutNotify < Formula
   homepage "https://github.com/reitermarkus/homebrew-tap"
   url "https://example.org/index.html"
   version "1.0.0"
+  sha256 :no_check
 
   depends_on "reattach-to-user-namespace"
   depends_on "terminal-notifier"
