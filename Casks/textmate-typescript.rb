@@ -2,7 +2,7 @@ cask "textmate-typescript" do
   version :latest
   sha256 :no_check
 
-  url "https://raw.githubusercontent.com/stanger/TypeScript-TextMate/HEAD/dist/TypeScript.tmbundle.zip"
+  url "https://github.com/stanger/TypeScript-TextMate/raw/HEAD/dist/TypeScript.tmbundle.zip"
   name "TypeScript for TextMate"
   homepage "https://github.com/stanger/TypeScript-TextMate"
 
