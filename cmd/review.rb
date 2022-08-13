@@ -16,6 +16,7 @@ module Homebrew
         Review open pull requests.
       EOS
 
+      switch "-d", "--dry-run", description: "Don't send approval requests."
       named_args :tap, min: 1
     end
   end
@@ -119,9 +120,11 @@ module Homebrew
           next
         end
 
-        print "Approve pull request ##{number}? "
+        print "Opening pull request ##{number}."
 
         open_tab html_files_url do
+          sleep 3
+
           with_raw_tty do
             loop do
               $stdin.read_nonblock(1)
@@ -130,7 +133,7 @@ module Homebrew
             end
           end
 
-          sleep 3
+          print "\rApprove pull request ##{number}? "
 
           input = with_raw_tty { $stdin.getc }
           case input
@@ -138,24 +141,54 @@ module Homebrew
             raise Interrupt
           when "\r", "\n"
             open_tab(html_url) do
-              enable_auto_merge(pr)
+              puts
 
-              GitHub::API.open_rest(
-                reviews_url,
-                data:           {
-                  commit_id: sha,
-                  event:     "APPROVE",
-                },
-                request_method: :POST,
-              )
+              cancelled = false
+              (0..3).each do |i|
+                puts "Approving in #{i}, press any key to cancel.\r"
 
-              puts "✅"
+                sleep 1
+
+                with_raw_tty do
+                  begin
+                    c = $stdin.read_nonblock(1)
+
+                    # Some key was pressed, so cancel.
+                    cancelled = true
+                  rescue IO::EAGAINWaitReadable
+                  end
+                end
+
+                break if cancelled
+              end
+
+
+              if cancelled
+                puts "❌ Approval cancelled."
+                next
+              end
+
+              if args.dry_run?
+                puts "✅ Pull request #{number} would have been approved."
+              else
+                # enable_auto_merge(pr)
+
+                GitHub::API.open_rest(
+                  reviews_url,
+                  data:           {
+                    commit_id: sha,
+                    event:     "APPROVE",
+                  },
+                  request_method: :POST,
+                )
+
+                puts "✅ Pull request #{number} approved."
+              end
 
               sleep 5
             end
           else
-            puts "❌"
-            next
+            puts "❌ Pull request #{number} not approved."
           end
         end
       end
