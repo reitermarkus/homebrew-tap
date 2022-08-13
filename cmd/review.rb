@@ -112,9 +112,6 @@ module Homebrew
             review.fetch("commit_id") == sha
         end
 
-        files_url = "#{pr.fetch("url")}/reviews"
-        files = GitHub::API.open_rest(reviews_url)
-
         if user_reviews_for_sha.any?
           puts "Pull request ##{number} already reviewed."
           next
@@ -123,8 +120,6 @@ module Homebrew
         print "Opening pull request ##{number}."
 
         open_tab html_files_url do
-          sleep 3
-
           with_raw_tty do
             loop do
               $stdin.read_nonblock(1)
@@ -141,33 +136,6 @@ module Homebrew
             raise Interrupt
           when "\r", "\n"
             open_tab(html_url) do
-              puts
-
-              cancelled = false
-              (0..3).each do |i|
-                puts "Approving in #{i}, press any key to cancel.\r"
-
-                sleep 1
-
-                with_raw_tty do
-                  begin
-                    c = $stdin.read_nonblock(1)
-
-                    # Some key was pressed, so cancel.
-                    cancelled = true
-                  rescue IO::EAGAINWaitReadable
-                  end
-                end
-
-                break if cancelled
-              end
-
-
-              if cancelled
-                puts "❌ Approval cancelled."
-                next
-              end
-
               if args.dry_run?
                 puts "✅ Pull request #{number} would have been approved."
               else
