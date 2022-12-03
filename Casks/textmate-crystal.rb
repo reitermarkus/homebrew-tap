@@ -9,5 +9,5 @@ cask "textmate-crystal" do
   plugin_name = "Crystal.tmbundle"
 
   artifact "#{plugin_name}-master",
-           target: "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles/#{plugin_name}"
+           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/#{plugin_name}"
 end

@@ -9,5 +9,5 @@ cask "textmate-cucumber" do
   plugin_name = "Cucumber.tmbundle"
 
   artifact "cucumber-tmbundle-master",
-           target: "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles/#{plugin_name}"
+           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/#{plugin_name}"
 end

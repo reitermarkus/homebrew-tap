@@ -7,5 +7,5 @@ cask "textmate-javascript-babel" do
   homepage "https://github.com/ravasthi/javascript-babel.tmbundle"
 
   artifact "javascript-babel.tmbundle-main",
-           target: "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles/JavaScript (Babel).tmbundle"
+           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/JavaScript (Babel).tmbundle"
 end

@@ -7,5 +7,5 @@ cask "textmate-elixir" do
   homepage "https://github.com/elixir-lang/elixir-tmbundle"
 
   artifact "elixir-tmbundle-master",
-           target: "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles/Elixir.tmbundle"
+           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/Elixir.tmbundle"
 end

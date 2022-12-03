@@ -8,7 +8,7 @@ cask "textmate-rust" do
 
   plugin_name = "Rust.tmbundle"
 
-  artifact plugin_name, target: "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles/#{plugin_name}"
+  artifact plugin_name, target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/#{plugin_name}"
 
   preflight do
     FileUtils.mv staged_path / "#{plugin_name}-master", staged_path / plugin_name

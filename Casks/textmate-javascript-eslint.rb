@@ -9,7 +9,7 @@ cask "textmate-javascript-eslint" do
   plugin_name = "javascript-eslint.tmbundle"
 
   artifact plugin_name,
-           target: "#{ENV["HOME"]}/Library/Application Support/TextMate/Bundles/JavaScript ESLint.tmbundle"
+           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/JavaScript ESLint.tmbundle"
 
   preflight do
     files = Dir.glob("#{staged_path}/*")
