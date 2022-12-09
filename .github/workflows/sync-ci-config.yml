@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - .github/workflows/sync-ci-config.yml
+    branches:
+      - main
   schedule:
     - cron: '33 4 * * *'
 
