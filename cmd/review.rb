@@ -139,7 +139,7 @@ module Homebrew
               if args.dry_run?
                 puts "✅ Pull request #{number} would have been approved."
               else
-                # enable_auto_merge(pr)
+                enable_auto_merge(pr)
 
                 GitHub::API.open_rest(
                   reviews_url,
