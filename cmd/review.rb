@@ -112,6 +112,9 @@ module Homebrew
             review.fetch("commit_id") == sha
         end
 
+        # Draft PRs cannot be merged.
+        next if pr.fetch("draft")
+
         if user_reviews_for_sha.any?
           puts "Pull request ##{number} already reviewed."
           next
