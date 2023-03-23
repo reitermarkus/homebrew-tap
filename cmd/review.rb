@@ -17,16 +17,17 @@ module Homebrew
       EOS
 
       switch "-d", "--dry-run", description: "Don't send approval requests."
+      switch "--browser", description: "Show pull requests in browser instead of terminal."
       named_args :tap, min: 1
     end
   end
 
   def with_raw_tty
-      system "stty", "raw", "-echo"
+    system "stty", "raw", "-echo"
 
-      yield
-    ensure
-      system "stty", "-raw", "echo"
+    yield
+  ensure
+    system "stty", "-raw", "echo"
   end
 
   def enable_auto_merge(pull_request)
@@ -86,6 +87,58 @@ module Homebrew
     ]
   end
 
+  def review_pr(pr, args:)
+    with_raw_tty do
+      loop do
+        $stdin.read_nonblock(1)
+      rescue IO::EAGAINWaitReadable
+        break
+      end
+    end
+
+    number = pr.fetch("number")
+    print "\rApprove pull request ##{number}? "
+
+    input = with_raw_tty { $stdin.getc }
+    case input
+    when "\u0003"
+      raise Interrupt
+    when "\r", "\n"
+      if args.browser?
+        open_tab(html_url) do
+          approve_pr(pr, args: args)
+
+          sleep 5
+        end
+      else
+        approve_pr(pr, args: args)
+      end
+    else
+      puts "❌ Pull request #{number} not approved."
+    end
+  end
+
+  def approve_pr(pr, args:)
+    number = pr.fetch("number")
+
+    if args.dry_run?
+      puts "✅ Pull request #{number} would have been approved."
+    else
+      enable_auto_merge(pr)
+
+      GitHub::API.open_rest(
+        "#{pr.fetch("url")}/reviews",
+        data:           {
+          commit_id: pr.fetch("head").fetch("sha"),
+          event:     "APPROVE",
+        },
+        request_method: :POST,
+      )
+
+      puts "✅ Pull request #{number} approved."
+    end
+  end
+
   def review
     args = review_args.parse
 
@@ -97,8 +150,6 @@ module Homebrew
       $stdin.sync = true
 
       pull_requests.each do |pr|
-        # puts JSON.pretty_generate(pr)
-
         number = pr.fetch("number")
         sha = pr.fetch("head").fetch("sha")
         html_url = pr.fetch("_links").fetch("html").fetch("href").to_s
@@ -115,52 +166,60 @@ module Homebrew
         # Draft PRs cannot be merged.
         next if pr.fetch("draft")
 
+        labels = pr.fetch("labels").map { |l| l.fetch("name") }
+
         if user_reviews_for_sha.any?
           puts "Pull request ##{number} already reviewed."
           next
         end
 
-        print "Opening pull request ##{number}."
+        if args.browser?
+          print "Opening pull request ##{number}."
 
-        open_tab html_files_url do
-          with_raw_tty do
-            loop do
-              $stdin.read_nonblock(1)
-            rescue IO::EAGAINWaitReadable
-              break
-            end
+          open_tab html_files_url do
+            review_pr(pr, args: args)
           end
+        else
+          title = pr.fetch("title")
+          body = pr.fetch("body")
 
-          print "\rApprove pull request ##{number}? "
+          diff_url = pr.fetch("diff_url")
+          diff = GitHub::API.open_rest(diff_url, parse_json: false)
 
-          input = with_raw_tty { $stdin.getc }
-          case input
-          when "\u0003"
-            raise Interrupt
-          when "\r", "\n"
-            open_tab(html_url) do
-              if args.dry_run?
-                puts "✅ Pull request #{number} would have been approved."
-              else
-                enable_auto_merge(pr)
+          puts
+          if Homebrew::EnvConfig.bat?
+            ENV["BAT_CONFIG_PATH"] = Homebrew::EnvConfig.bat_config_path
+            ENV["BAT_THEME"] = Homebrew::EnvConfig.bat_theme
+            bat = ensure_formula_installed!(
+              "bat",
+              reason:           "displaying <formula>/<cask> source",
+              # The user might want to capture the output of `brew cat ...`
+              # Redirect stdout to stderr
+              output_to_stderr: true,
+            ).opt_bin/"bat"
 
-                GitHub::API.open_rest(
-                  reviews_url,
-                  data:           {
-                    commit_id: sha,
-                    event:     "APPROVE",
-                  },
-                  request_method: :POST,
-                )
+            out, = system_command! bat,
+                                   args: ["--paging", "never", "--language", "markdown", "--color", "always", "--style", "plain"], input: <<~EOS
+                                     # #{title}
 
-                puts "✅ Pull request #{number} approved."
-              end
+                                     #{body}
+                                   EOS
+            puts out.chomp
+            puts
 
-              sleep 5
-            end
+            out, = system_command!(bat,
+                                   args: ["--paging", "never", "--language", "diff", "--color", "always", "--style", "plain"], input: diff)
+            puts out.chomp
           else
-            puts "❌ Pull request #{number} not approved."
+            puts "# #{title}"
+            puts
+            puts body
+            puts
+            puts diff
           end
+          puts
+
+          review_pr(pr, args: args)
         end
       end
     end
