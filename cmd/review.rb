@@ -34,6 +34,7 @@ module Homebrew
     title = pull_request.fetch("title")
     number = pull_request.fetch("number")
     node_id = pull_request.fetch("node_id")
+    sha = pull_request.fetch("head").fetch("sha")
 
     headline = "#{title} (##{number})"
 
@@ -43,6 +44,7 @@ module Homebrew
           pullRequestId: #{node_id.inspect},
           commitHeadline: #{headline.inspect},
           commitBody: "\\n",
+          expectedHeadOid: #{sha.inspect},
           mergeMethod: SQUASH,
         }) {
           pullRequest {
