@@ -144,6 +144,8 @@ module Homebrew
 
     taps = args.named.map { |t| Tap.fetch(t) }
 
+    current_user = GitHub.user.fetch("login")
+
     taps.each do |tap|
       pull_requests = GitHub.pull_requests(tap.full_name, state: :open, per_page: 100)
 
@@ -155,10 +157,13 @@ module Homebrew
         html_url = pr.fetch("_links").fetch("html").fetch("href").to_s
         html_files_url = "#{html_url}/files/#{sha}"
 
+        # Cannot approve one's own pull requests.
+        next if pr.fetch("user").fetch("login") == current_user
+
         reviews_url = "#{pr.fetch("url")}/reviews"
         reviews = GitHub::API.open_rest(reviews_url)
         user_reviews_for_sha = reviews.select do |review|
-          review.fetch("user").fetch("login") == GitHub.user.fetch("login") &&
+          review.fetch("user").fetch("login") == current_user &&
             review.fetch("state") != "DISMISSED" &&
             review.fetch("commit_id") == sha
         end
