@@ -98,41 +98,15 @@ class Openhab < Formula
     EOS
   end
 
-  plist_options startup: true, manual: "openhab"
-
   def plist_name
     "org.openhab.daemon"
   end
 
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{opt_bin}/openhab</string>
-            <string>server</string>
-          </array>
-          <key>OnDemand</key>
-          <false/>
-          <key>RunAtLoad</key>
-          <true/>
-          <key>KeepAlive</key>
-          <true/>
-          <key>GID</key>
-          <integer>20</integer>
-          <key>UserName</key>
-          <string>root</string>
-          <key>StandardErrorPath</key>
-          <string>#{var}/openhab/log/daemon.log</string>
-          <key>StandardOutPath</key>
-          <string>#{var}/openhab/log/daemon.log</string>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"openhab", "server"]
+    keep_alive true
+    require_root true
+    log_path var/"openhab/log/daemon.log"
+    error_log_path var/"openhab/log/daemon.log"
   end
 end
