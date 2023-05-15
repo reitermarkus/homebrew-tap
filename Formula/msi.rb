@@ -1,7 +1,7 @@
 class Msi < Formula
   desc "Print details of data in miniSEED format"
-  homepage "https://github.com/iris-edu/msi"
-  url "https://github.com/iris-edu/msi/archive/refs/tags/v3.8.tar.gz"
+  homepage "https://github.com/EarthScope/msi"
+  url "https://github.com/EarthScope/msi/archive/refs/tags/v3.8.tar.gz"
   sha256 "e1018936832346868307a9934d82083e77894c0e356aab03e0a7e0146bbb6fec"
   license "GPL-3.0"
 
@@ -23,6 +23,6 @@ class Msi < Formula
   end
 
   test do
-    system "msi", "-h"
+    system "#{bin}/msi", "-h"
   end
 end
