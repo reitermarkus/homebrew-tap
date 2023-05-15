@@ -7,5 +7,5 @@ cask "textmate-opencl" do
   homepage "https://github.com/reitermarkus/opencl.tmbundle"
 
   artifact "opencl.tmbundle-master",
-           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/OpenCL.tmbundle"
+           target: "~/Library/Application Support/TextMate/Bundles/OpenCL.tmbundle"
 end

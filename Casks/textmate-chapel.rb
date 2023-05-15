@@ -7,5 +7,5 @@ cask "textmate-chapel" do
   homepage "https://github.com/chapel-lang/chapel-tmbundle"
 
   artifact "chapel-tmbundle-master",
-           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/Chapel.tmbundle"
+           target: "~/Library/Application Support/TextMate/Bundles/Chapel.tmbundle"
 end

@@ -7,5 +7,5 @@ cask "textmate-editorconfig" do
   homepage "https://github.com/Mr0grog/editorconfig-textmate"
 
   artifact "editorconfig-textmate.tmplugin",
-           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/EditorConfig.tmplugin"
+           target: "~/Library/Application Support/TextMate/Bundles/EditorConfig.tmplugin"
 end

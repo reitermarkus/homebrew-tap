@@ -9,5 +9,5 @@ cask "textmate-glsl" do
   plugin_name = "GLSL.tmbundle"
 
   artifact "#{plugin_name}-master",
-           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/#{plugin_name}"
+           target: "~/Library/Application Support/TextMate/Bundles/#{plugin_name}"
 end

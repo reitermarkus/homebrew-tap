@@ -7,5 +7,5 @@ cask "textmate-fish" do
   homepage "https://github.com/sanssecours/Fish.tmbundle"
 
   artifact "Fish.tmbundle-master",
-           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/Fish.tmbundle"
+           target: "~/Library/Application Support/TextMate/Bundles/Fish.tmbundle"
 end

@@ -7,5 +7,5 @@ cask "textmate-onsave" do
   homepage "https://github.com/reitermarkus/on-save.tmbundle"
 
   artifact "on-save.tmbundle-master",
-           target: "#{Dir.home}/Library/Application Support/TextMate/Bundles/OnSave.tmbundle"
+           target: "~/Library/Application Support/TextMate/Bundles/OnSave.tmbundle"
 end
