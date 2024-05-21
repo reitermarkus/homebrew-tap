@@ -1,8 +1,8 @@
 class Msi < Formula
   desc "Print details of data in miniSEED format"
   homepage "https://github.com/EarthScope/msi"
-  url "https://github.com/EarthScope/msi/archive/refs/tags/v3.8.tar.gz"
-  sha256 "e1018936832346868307a9934d82083e77894c0e356aab03e0a7e0146bbb6fec"
+  url "https://github.com/EarthScope/msi/archive/refs/tags/v4.2.tar.gz"
+  sha256 "c966fefe0aae0bdc5b61522b18f800458044a36d62da38cd5d566a343c7a1846"
   license "GPL-3.0"
 
   depends_on "libmseed"
