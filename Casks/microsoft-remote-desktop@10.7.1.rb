@@ -24,12 +24,6 @@ cask "microsoft-remote-desktop@10.7.1" do
     system_command "pkgutil", args: ["--expand-full", "#{staged_path}/Microsoft_Remote_Desktop_#{version}_installer.pkg", "#{staged_path}/Microsoft_Remote_Desktop_#{version}_installer"]
   end
 
-  postflight do
-    system_command "defaults", args: [
-      "write", "com.microsoft.rdc.macos", "ClientSettings.DisableOnPremWebSocketGateway", "true"
-    ]
-  end
-
   zap trash: [
     "~/Library/Application Scripts/com.microsoft.rdc.macos",
     "~/Library/Containers/com.microsoft.rdc.macos",
