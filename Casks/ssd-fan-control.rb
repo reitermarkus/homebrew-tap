@@ -14,6 +14,6 @@ cask "ssd-fan-control" do
 
   pkg "SSD Fan Control.pkg"
 
-  uninstall pkgutil:   "net.exirion.pkg.SSDFanControl",
-            launchctl: "net.exirion.ssdfanctrl"
+  uninstall launchctl: "net.exirion.ssdfanctrl",
+            pkgutil:   "net.exirion.pkg.SSDFanControl"
 end
