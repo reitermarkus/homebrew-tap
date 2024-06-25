@@ -5,11 +5,9 @@ cask "ilearn" do
   url "https://github.com/reitermarkus/mirror/raw/HEAD/iLearn.zip",
       verified: "github.com/reitermarkus/mirror/"
   name "iLearn"
-  homepage "http://www.rmartijnr.eu/iLearn/index.html"
+  homepage "https://web.archive.org/web/20240224113726/http://www.rmartijnr.eu/ilearn.html"
+
+  deprecate! date: "2016-01-01", because: :discontinued
 
   app "iLearn.app"
-
-  caveats do
-    discontinued
-  end
 end

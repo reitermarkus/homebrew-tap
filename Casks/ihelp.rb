@@ -5,11 +5,9 @@ cask "ihelp" do
   url "https://github.com/reitermarkus/mirror/raw/HEAD/iHelp.zip",
       verified: "github.com/reitermarkus/mirror/"
   name "iHelp"
-  homepage "http://www.rmartijnr.eu/iHelp/index.html"
+  homepage "https://web.archive.org/web/20231003180144/http://www.rmartijnr.eu/ihelp.html"
+
+  deprecate! date: "2016-01-01", because: :discontinued
 
   app "iHelp.app"
-
-  caveats do
-    discontinued
-  end
 end
