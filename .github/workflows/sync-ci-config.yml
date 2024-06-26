@@ -14,12 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone main repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
       - name: Clone secondary repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: Homebrew/homebrew-cask
           path: homebrew-cask
