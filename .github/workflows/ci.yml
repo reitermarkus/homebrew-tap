@@ -126,7 +126,7 @@ jobs:
 
       - name: Cache Homebrew Gems
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ steps.set-up-homebrew.outputs.gems-path }}
           key: ${{ matrix.runner }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
@@ -134,7 +134,7 @@ jobs:
 
       - name: Cache style cache
         if: runner.os == 'macOS'
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/Library/Caches/Homebrew/style
           key: macos-style-cache-${{ github.sha }}
