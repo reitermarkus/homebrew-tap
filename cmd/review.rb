@@ -15,8 +15,10 @@ module Homebrew
           Review open pull requests
         EOS
 
-        switch "-d", "--dry-run", description: "Don't send approval requests."
+        switch "--dry-run", description: "Don't send approval requests."
         switch "--browser", description: "Show pull requests in browser instead of terminal."
+        switch "--only-bumps", description: "Only bumps."
+        switch "--only-official", description: "Only BrewTestBot PRs."
 
         named_args :tap, min: 1
       end
@@ -32,8 +34,8 @@ module Homebrew
       private def enable_auto_merge(pull_request)
         title = pull_request.fetch("title")
         number = pull_request.fetch("number")
-        node_id = pull_request.fetch("node_id")
-        sha = pull_request.fetch("head").fetch("sha")
+        node_id = pull_request.fetch("id")
+        sha = pull_request.fetch("headRef").fetch("target").fetch('oid')
 
         headline = "#{title} (##{number})"
 
@@ -88,6 +90,63 @@ module Homebrew
         ]
       end
 
+      def fetch_pull_requests(tap)
+        query = <<~EOS
+          query($owner: String!, $repo: String!, $states: [PullRequestState!], $after: String) {
+            repository(owner: $owner, name: $repo) {
+              pullRequests(states: $states, first: 100, after: $after) {
+                nodes {
+                  id
+                  number
+                  author {
+                    login
+                  }
+                  title
+                  body
+                  isDraft
+                  labels(first: 100) {
+                    nodes {
+                      name
+                    }
+                  }
+                  url
+                  headRef {
+                    target {
+                      oid
+                    }
+                  }
+                  reviews(last: 100) {
+                    nodes {
+                      author {
+                        login
+                      }
+                      state
+                      commit {
+                        oid
+                      }
+                    }
+                  }
+                }
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+              }
+            }
+          }
+        EOS
+        owner, repo = tap.full_name.split("/")
+        variables = { owner:, repo:, states: ["OPEN"] }
+
+        pull_requests = []
+        GitHub::API.paginate_graphql(query, variables:) do |result|
+          data = result.dig("repository", "pullRequests")
+          pull_requests.concat(data["nodes"])
+          data["pageInfo"]
+        end
+        pull_requests
+      end
+
       private def review_pr(pr, args:)
         with_raw_tty do
           loop do
@@ -127,10 +186,12 @@ module Homebrew
         else
           enable_auto_merge(pr)
 
+          url = pr.fetch("url").sub('https://github.com/', 'https://api.github.com/repos/').sub('/pull/', '/pulls/')
+
           GitHub::API.open_rest(
-            "#{pr.fetch("url")}/reviews",
+            "#{url}/reviews",
             data:           {
-              commit_id: pr.fetch("head").fetch("sha"),
+              commit_id: pr.fetch("headRef").fetch("target").fetch('oid'),
               event:     "APPROVE",
             },
             request_method: :POST,
@@ -147,31 +208,41 @@ module Homebrew
         current_user = GitHub.user.fetch("login")
 
         taps.each do |tap|
-          pull_requests = GitHub.pull_requests(tap.full_name, state: :open, per_page: 100)
+          pull_requests = fetch_pull_requests(tap).sort_by { |pr| -pr.fetch('number') }
 
           $stdin.sync = true
 
           pull_requests.each do |pr|
             number = pr.fetch("number")
-            sha = pr.fetch("head").fetch("sha")
-            html_url = pr.fetch("_links").fetch("html").fetch("href").to_s
+            sha = pr.fetch("headRef").fetch("target").fetch('oid')
+            html_url = pr.fetch("url")
             html_files_url = "#{html_url}/files/#{sha}"
 
-            # Cannot approve one's own pull requests.
-            next if pr.fetch("user").fetch("login") == current_user
+            author = pr.fetch("author").fetch("login")
 
-            reviews_url = "#{pr.fetch("url")}/reviews"
-            reviews = GitHub::API.open_rest(reviews_url)
-            user_reviews_for_sha = reviews.select do |review|
-              review.fetch("user").fetch("login") == current_user &&
-                review.fetch("state") != "DISMISSED" &&
-                review.fetch("commit_id") == sha
+            # Cannot approve one's own pull requests.
+            next if author == current_user
+
+            next if args.only_official? && author != "BrewTestBot"
+
+            reviews = pr.fetch('reviews').fetch('nodes')
+            reviews_for_sha = reviews.select do |review|
+              review.fetch("state") != "DISMISSED" &&
+              review.fetch("commit").fetch('oid') == sha
             end
 
-            # Draft PRs cannot be merged.
-            next if pr.fetch("draft")
+            if reviews_for_sha.any? { |review| review.fetch('state') == 'APPROVED' }
+              puts "Pull request ##{number} already approved."
+              next
+            end
 
-            labels = pr.fetch("labels").map { |l| l.fetch("name") }
+            user_reviews_for_sha = reviews_for_sha.select { |review| review.fetch("author").fetch("login") == current_user }
+
+            # Draft PRs cannot be merged.
+            next if pr.fetch("isDraft")
+
+            labels = pr.fetch("labels").fetch('nodes').map { |l| l.fetch("name") }
+            next if args.only_bumps? && !labels.include?('bump-cask-pr')
 
             if user_reviews_for_sha.any?
               puts "Pull request ##{number} already reviewed."
@@ -188,20 +259,21 @@ module Homebrew
               title = pr.fetch("title")
               body = pr.fetch("body")
 
-              diff_url = pr.fetch("diff_url")
+              diff_url = "#{pr.fetch("url")}.diff"
               diff = GitHub::API.open_rest(diff_url, parse_json: false)
 
               puts
               if Homebrew::EnvConfig.bat?
                 ENV["BAT_CONFIG_PATH"] = Homebrew::EnvConfig.bat_config_path
                 ENV["BAT_THEME"] = Homebrew::EnvConfig.bat_theme
-                bat = ensure_formula_installed!(
-                  "bat",
+
+                bat = Formula["bat"].ensure_installed!(
                   reason:           "displaying <formula>/<cask> source",
                   # The user might want to capture the output of `brew cat ...`
                   # Redirect stdout to stderr
                   output_to_stderr: true,
-                ).opt_bin/"bat"
+                  executable:       "bat",
+                )
 
                 out, = system_command! bat,
                                        args: ["--paging", "never", "--language", "markdown", "--color", "always", "--style", "plain"], input: <<~EOS
